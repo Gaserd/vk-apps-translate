@@ -2,21 +2,10 @@ import React from 'react';
 import { View, Panel, PanelHeader, FixedLayout, Button, Div, Textarea, FormLayout, Select } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import Icon24Forward from '@vkontakte/icons/dist/24/forward';
-
+import languages from './languages'
 
 
 class App extends React.Component {
-
-	languages = [
-		{
-			value : 'en',
-			text : 'Английский'
-		},
-		{
-			value : 'ru',
-			text : 'Русский'
-		}
-	]
 
 	constructor(props) {
 		super(props);
@@ -62,7 +51,7 @@ class App extends React.Component {
 						}} 
 						value={this.state.langFrom}
 						onChange={(e) => this.setState({ langFrom : e.target.value })}>
-							{ this.languages.map((lang,index) => (
+							{ languages.map((lang,index) => (
 								<option key={index} value={lang.value}>{lang.text}</option>
 							))}
 						</Select>
@@ -79,7 +68,7 @@ class App extends React.Component {
 						}} 
 						value={this.state.langTo}
 						onChange={(e) => this.setState({ langTo : e.target.value })}>
-							{ this.languages.map((lang,index) => (
+							{ languages.map((lang,index) => (
 								<option key={index} value={lang.value}>{lang.text}</option>
 							))}
 						</Select>
