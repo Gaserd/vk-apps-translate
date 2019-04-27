@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Panel, PanelHeader, FixedLayout, Button, Div, Textarea, FormLayout, Select } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
-import Icon24Forward from '@vkontakte/icons/dist/24/forward';
+import Icon24Repeat from '@vkontakte/icons/dist/24/repeat';
 import languages from './languages'
 
 
@@ -33,6 +33,13 @@ class App extends React.Component {
 		})
 	}
 
+	onReverseLanguage = () => {
+		this.setState({
+			langFrom : this.state.langTo,
+			langTo : this.state.langFrom
+		})
+	}
+
 
 
 	render() {
@@ -43,11 +50,15 @@ class App extends React.Component {
 						Переводчик
 					</PanelHeader>
 					<Div style={{
-						textAlign : 'center'
+						textAlign : 'center',
+						display : 'flex',
+						flexDirection : 'row',
+						justifyContent : 'center',
+						alignItems : 'center'
 					}}>
 						<Select style={{
-							display : 'inline-block',
-							width : '40%'
+							flexGrow  : 2,
+							maxWidth : 200
 						}} 
 						value={this.state.langFrom}
 						onChange={(e) => this.setState({ langFrom : e.target.value })}>
@@ -55,16 +66,18 @@ class App extends React.Component {
 								<option key={index} value={lang.value}>{lang.text}</option>
 							))}
 						</Select>
-						<div style={{
+						<div 
+						onClick={() => this.onReverseLanguage()}
+						style={{
 							display : 'inline-block',
 							margin : '0 5px',
 							color : 'var(--button_primary_background)'
 						}}>
-							<Icon24Forward />
+							<Icon24Repeat />
 						</div>
 						<Select style={{
-							display : 'inline-block',
-							width : '40%'
+							flexGrow  : 2,
+							maxWidth : 200
 						}} 
 						value={this.state.langTo}
 						onChange={(e) => this.setState({ langTo : e.target.value })}>
