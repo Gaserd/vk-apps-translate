@@ -4,6 +4,10 @@ const languages = [
        "text":"Английский"
     },
     {
+      "value":"ru",
+      "text":"Русский"
+    },
+    {
        "value":"ar",
        "text":"Арабский" 
     },
