@@ -12,11 +12,13 @@ class App extends React.Component {
 
 		this.state = {
 			activePanel: 'home',
-			apiKey : 'trnsl.1.1.20190424T093036Z.286892ab4580ac8b.3419dbe26a59c5c44c724fd660b391f96ef4bbb8',
+			accountId : '1086',
+			apiKey : '5ad374573f56fbca9889cd71b0536db3',
 			text : '',
-			translateText : [],
+			translateText : '',
 			langFrom : 'en',
-			langTo : 'ru'
+			langTo : 'ru',
+			error : false
 		};
 	}
 
@@ -26,10 +28,20 @@ class App extends React.Component {
 	}
 
 	onClickTranslateButton = () => {
-		fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?lang=${this.state.langFrom}-${this.state.langTo}&key=${this.state.apiKey}&text=${this.state.text}`)
+		let {
+			accountId,
+			apiKey,
+			text,
+			langFrom,
+			langTo
+		} = this.state
+		fetch(`https://api.multillect.com/translate/json/1.0/${accountId}?method=translate/api/translate&from=${langFrom}&to=${langTo}&text=${text}&sig=${apiKey}`)
 		.then(res => res.json())
 		.then(data => {
-			this.setState({ translateText : data.text })
+			this.setState({ translateText : data.result.translated })
+		})
+		.catch(e => {
+			this.setState({ translateText : '' , error : true })
 		})
 	}
 
@@ -96,11 +108,15 @@ class App extends React.Component {
 						</Textarea>
 						<Div>
 							{
-								this.state.translateText.map((text, index) => (
-									<p key={index}>{text}</p>
-								))
+								<p>{this.state.translateText}</p>
 							}
 						</Div>
+						{
+							this.state.error &&
+							<Div>
+								<p>Извините, но возникла какая-то ошибка. Попробуйте повторить через 2-3 минуты.</p>
+							</Div>
+						}
 					</FormLayout>
 					<FixedLayout vertical='bottom'>
 						<Div>
