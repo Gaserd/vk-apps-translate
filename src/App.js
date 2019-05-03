@@ -1,14 +1,15 @@
-import React from 'react';
-import { View, Panel, PanelHeader, FixedLayout, Button, Div, Textarea, FormLayout, Select } from '@vkontakte/vkui';
-import '@vkontakte/vkui/dist/vkui.css';
-import Icon24Repeat from '@vkontakte/icons/dist/24/repeat';
+import React from 'react'
+import { View, Panel, PanelHeader, FixedLayout, Button, Div, Textarea, FormLayout, Select } from '@vkontakte/vkui'
+import '@vkontakte/vkui/dist/vkui.css'
+import Icon24Repeat from '@vkontakte/icons/dist/24/repeat'
 import languages from './languages'
+import connect from '@vkontakte/vkui-connect'
 
 
 class App extends React.Component {
 
 	constructor(props) {
-		super(props);
+		super(props)
 
 		this.state = {
 			activePanel: 'home',
@@ -19,7 +20,25 @@ class App extends React.Component {
 			langFrom : 'en',
 			langTo : 'ru',
 			error : false
-		};
+		}
+	}
+
+	componentDidMount() {
+		connect.subscribe((e) => {
+			switch (e.detail.type) {
+				case 'VKWebAppGetUserInfoResult':
+					this.setState({ fetchedUser: e.detail.data })
+					break
+				case 'VKWebAppUpdateConfig':
+					if (typeof e.detail.data.scheme !== 'undefined')
+						window.document.body.setAttribute('scheme', e.detail.data.scheme)
+					break
+				default:
+					console.log(e.detail.type)
+			}
+		})
+		connect.send('VKWebAppGetUserInfo', {})
+		connect.send("VKWebAppUpdateConfig", {})
 	}
 
 	onChangeText = (e) => {
@@ -28,21 +47,25 @@ class App extends React.Component {
 	}
 
 	onClickTranslateButton = () => {
-		let {
-			accountId,
-			apiKey,
-			text,
-			langFrom,
-			langTo
-		} = this.state
-		fetch(`https://api.multillect.com/translate/json/1.0/${accountId}?method=translate/api/translate&from=${langFrom}&to=${langTo}&text=${text}&sig=${apiKey}`)
-		.then(res => res.json())
-		.then(data => {
-			this.setState({ translateText : data.result.translated })
-		})
-		.catch(e => {
-			this.setState({ translateText : '' , error : true })
-		})
+		let text = this.state.text.trim()
+
+		if (text !== '') {
+			let {
+				accountId,
+				apiKey,
+				langFrom,
+				langTo
+			} = this.state
+
+			fetch(`https://api.multillect.com/translate/json/1.0/${accountId}?method=translate/api/translate&from=${langFrom}&to=${langTo}&text=${text}&sig=${apiKey}`)
+			.then(res => res.json())
+			.then(data => {
+				this.setState({ translateText : data.result.translated })
+			})
+			.catch(e => {
+				this.setState({ translateText : '' , error : true })
+			})
+		}
 	}
 
 	onReverseLanguage = () => {
@@ -100,17 +123,21 @@ class App extends React.Component {
 					</Div>
 					<FormLayout>
 						<Textarea 
-							top="Введите текст" 
-							placeholder="Hello, world!"
+							top="Введите текст (макс: 300 символов)" 
+							placeholder="введите текст, который хотите перевести"
 							value={this.state.text}
 							onChange={this.onChangeText}
+							maxLength={300}
 						>
 						</Textarea>
-						<Div>
-							{
-								<p>{this.state.translateText}</p>
-							}
-						</Div>
+						{
+							this.state.translateText !== '' &&
+							<Div>
+								{
+									<p>{this.state.translateText}</p>
+								}
+							</Div>
+						}
 						{
 							this.state.error &&
 							<Div>
@@ -130,8 +157,8 @@ class App extends React.Component {
 					</FixedLayout>
 				</Panel>
 			</View>
-		);
+		)
 	}
 }
 
-export default App;
+export default App
