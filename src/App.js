@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Panel, PanelHeader, FixedLayout, Button, Div, Textarea, FormLayout, Select } from '@vkontakte/vkui'
+import { View, Panel, PanelHeader, Button, Div, Textarea, FormLayout, Select } from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css'
 import Icon24Repeat from '@vkontakte/icons/dist/24/repeat'
 import { languages, checkLanguageAvailability } from './languages'
@@ -72,6 +72,8 @@ class App extends React.Component {
 			.catch(e => {
 				this.setState({ translateText : '' , error : true })
 			})
+		} else {
+			this.setState({ translateText : '' })
 		}
 	}
 
