@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/vk-apps-translate/static/css/2.d9881c38.chunk.css"
   },
   {
-    "revision": "0516bc2991983cb348f992968f55c8a3",
+    "revision": "33d35a22a92ccdcd432fa619f717f214",
     "url": "/vk-apps-translate/index.html"
   }
 ];
