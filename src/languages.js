@@ -1,4 +1,4 @@
-const languages = [
+export const languages = [
     {
        "value":"en",
        "text":"Английский"
@@ -61,4 +61,13 @@ const languages = [
     }
  ]
 
- export default languages
+export function checkLanguageAvailability(lang) {
+   let flag = false
+   for (let i = 0; i < languages.length; i++) {
+      if (languages[i].value === lang) {
+         flag = true
+         break
+      }
+   }
+   return flag
+}

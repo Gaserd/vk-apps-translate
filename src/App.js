@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Panel, PanelHeader, FixedLayout, Button, Div, Textarea, FormLayout, Select } from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css'
 import Icon24Repeat from '@vkontakte/icons/dist/24/repeat'
-import languages from './languages'
+import { languages, checkLanguageAvailability } from './languages'
 import connect from '@vkontakte/vkui-connect'
 
 
@@ -53,13 +53,20 @@ class App extends React.Component {
 			let {
 				accountId,
 				apiKey,
-				langFrom,
 				langTo
 			} = this.state
 
-			fetch(`https://api.multillect.com/translate/json/1.0/${accountId}?method=translate/api/translate&from=${langFrom}&to=${langTo}&text=${text}&sig=${apiKey}`)
+			fetch(`https://api.multillect.com/translate/json/1.0/${accountId}?method=translate/api/translate&to=${langTo}&text=${text}&sig=${apiKey}`)
 			.then(res => res.json())
 			.then(data => {
+				if (typeof data.result.language !== 'undefined' && data.result.language.code !== null) {
+					const code = data.result.language.code
+					if (this.state.langFrom !== code) {
+						if (checkLanguageAvailability(code)) {
+							this.setState({ langFrom : code })
+						}
+					}
+				}
 				this.setState({ translateText : data.result.translated })
 			})
 			.catch(e => {
@@ -78,6 +85,9 @@ class App extends React.Component {
 
 
 	render() {
+
+		const widthPercent = '45%'
+
 		return (
 			<View activePanel={this.state.activePanel}>
 				<Panel id='home' theme='white'>
@@ -93,7 +103,7 @@ class App extends React.Component {
 					}}>
 						<Select style={{
 							flexGrow  : 2,
-							maxWidth : 200
+							width : widthPercent
 						}} 
 						value={this.state.langFrom}
 						onChange={(e) => this.setState({ langFrom : e.target.value })}>
@@ -112,7 +122,7 @@ class App extends React.Component {
 						</div>
 						<Select style={{
 							flexGrow  : 2,
-							maxWidth : 200
+							width: widthPercent
 						}} 
 						value={this.state.langTo}
 						onChange={(e) => this.setState({ langTo : e.target.value })}>
@@ -124,37 +134,39 @@ class App extends React.Component {
 					<FormLayout>
 						<Textarea 
 							top="Введите текст (макс: 300 символов)" 
-							placeholder="введите текст, который хотите перевести"
+							placeholder="Введите текст, который хотите перевести"
 							value={this.state.text}
 							onChange={this.onChangeText}
 							maxLength={300}
 						>
 						</Textarea>
+						<Button
+							size='xl'
+							onClick={() => this.onClickTranslateButton()}
+						>
+							Перевести
+						</Button>
 						{
 							this.state.translateText !== '' &&
-							<Div>
-								{
+							<Div
+								style={{
+									color : (window.document.body.getAttribute('scheme') === 'client_light') ? '#4a4a4a' : '#fff'
+								}}
+							>
 									<p>{this.state.translateText}</p>
-								}
 							</Div>
 						}
 						{
 							this.state.error &&
-							<Div>
+							<Div
+								style={{
+									color : (window.document.body.getAttribute('scheme') === 'client_light') ? '#4a4a4a' : '#fff'
+								}}
+							>
 								<p>Извините, но возникла какая-то ошибка. Попробуйте повторить через 2-3 минуты.</p>
 							</Div>
 						}
 					</FormLayout>
-					<FixedLayout vertical='bottom'>
-						<Div>
-							<Button
-								size='xl'
-								onClick={() => this.onClickTranslateButton()}
-							>
-								Перевести
-							</Button>
-						</Div>
-					</FixedLayout>
 				</Panel>
 			</View>
 		)
