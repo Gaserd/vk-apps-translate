@@ -4,6 +4,7 @@ import '@vkontakte/vkui/dist/vkui.css'
 import Icon24Repeat from '@vkontakte/icons/dist/24/repeat'
 import { languages, checkLanguageAvailability } from './languages'
 import connect from '@vkontakte/vkui-connect'
+import ReactGA from 'react-ga'
 
 
 class App extends React.Component {
@@ -49,6 +50,12 @@ class App extends React.Component {
 	onClickTranslateButton = () => {
 		let text = this.state.text.trim()
 
+		ReactGA.event({
+			category: 'Translate',
+			action: 'onClickTranslateButton',
+			value : JSON.stringify(this.state)
+		})
+
 		if (text !== '') {
 			let {
 				accountId,
@@ -78,6 +85,12 @@ class App extends React.Component {
 	}
 
 	onReverseLanguage = () => {
+
+		ReactGA.event({
+			category: 'Translate',
+			action: 'onReverseLanguage'
+		})
+
 		this.setState({
 			langFrom : this.state.langTo,
 			langTo : this.state.langFrom
