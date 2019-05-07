@@ -15,7 +15,7 @@ export const languages = [
        "value":"es",
        "text":"Испанский" 
     },
-    {
+    /*{
        "value":"kk",
        "text":"Казахский" 
     },
@@ -26,19 +26,19 @@ export const languages = [
     {
        "value":"ko",
        "text":"Корейский" 
-    },
+    },*/
     {
        "value":"de",
        "text":"Немецкий" 
     },
-    {
+    /*{
        "value":"pl",
        "text":"Польский" 
     },
     {
        "value":"pt",
        "text":"Португальский" 
-    },
+    },*/
     {
        "value":"tr",
        "text":"Турецкий" 
@@ -51,14 +51,10 @@ export const languages = [
        "value":"fr",
        "text":"Французский" 
     },
-    {
+    /*{
        "value":"hi",
        "text":"Хинди" 
-    },
-    {
-       "value":"ja",
-       "text":"Японский"
-    }
+    }*/
  ]
 
 export function checkLanguageAvailability(lang) {
