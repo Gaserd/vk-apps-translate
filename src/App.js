@@ -163,14 +163,34 @@ class App extends React.Component {
 						</Button>
 						{
 							this.state.translateText !== '' &&
+							<div>
 							<Div
 								style={{
 									color : (window.document.body.getAttribute('scheme') === 'client_light') ? '#4a4a4a' : '#fff'
 								}}
 							>
+									Перевод:
 									<p>{this.state.translateText}</p>
 							</Div>
+							
+							</div>
 						}
+						<Div 
+								style={
+									{ color: '#a4a4a4'}
+								}
+								onClick={() => {
+										ReactGA.event({
+											category: 'Translate',
+											action: 'clickBanner'
+										})
+										connect.send("VKWebAppOpenApp", {"app_id": 6900614, "location": "utm_source=translate&utm_medium=banner&utm_campaign=translate_app"})
+									}
+								}
+							>
+								Хотели бы туда, где сможете использовать переводчик?<br/>
+								Тогда попробуй наше приложение – <b>Поиск авиабилетов</b>
+							</Div>
 						{
 							this.state.error &&
 							<Div
