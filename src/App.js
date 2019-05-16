@@ -177,7 +177,7 @@ class App extends React.Component {
 						}
 						<Div 
 								style={
-									{ color: '#a4a4a4'}
+									{ color: '#285473'}
 								}
 								onClick={() => {
 										ReactGA.event({
@@ -189,7 +189,7 @@ class App extends React.Component {
 								}
 							>
 								Хотели бы туда, где сможете использовать переводчик?<br/>
-								Тогда попробуй наше приложение – <b>Поиск авиабилетов</b>
+								Тогда попробуй наше приложение – Поиск авиабилетов
 							</Div>
 						{
 							this.state.error &&
