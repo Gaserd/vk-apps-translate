@@ -28,7 +28,8 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-ga": "^2.5.7"
+    "react-ga": "^2.5.7",
+    "vk-apps-button": "^1.0.0"
   },
   "browserslist": [
     ">0.2%",
