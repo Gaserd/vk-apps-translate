@@ -1,13 +1,14 @@
 {
-  "main.js": "/vk-apps-translate/static/js/main.13f67ff8.chunk.js",
-  "main.js.map": "/vk-apps-translate/static/js/main.13f67ff8.chunk.js.map",
+  "main.js": "/vk-apps-translate/static/js/main.074c6334.chunk.js",
+  "main.js.map": "/vk-apps-translate/static/js/main.074c6334.chunk.js.map",
   "runtime~main.js": "/vk-apps-translate/static/js/runtime~main.650b0204.js",
   "runtime~main.js.map": "/vk-apps-translate/static/js/runtime~main.650b0204.js.map",
   "static/css/2.d9881c38.chunk.css": "/vk-apps-translate/static/css/2.d9881c38.chunk.css",
-  "static/js/2.ee2f98f9.chunk.js": "/vk-apps-translate/static/js/2.ee2f98f9.chunk.js",
-  "static/js/2.ee2f98f9.chunk.js.map": "/vk-apps-translate/static/js/2.ee2f98f9.chunk.js.map",
+  "static/js/2.4bc43aca.chunk.js": "/vk-apps-translate/static/js/2.4bc43aca.chunk.js",
+  "static/js/2.4bc43aca.chunk.js.map": "/vk-apps-translate/static/js/2.4bc43aca.chunk.js.map",
   "index.html": "/vk-apps-translate/index.html",
-  "precache-manifest.812d1abd9eb151d944102148bf6791a5.js": "/vk-apps-translate/precache-manifest.812d1abd9eb151d944102148bf6791a5.js",
+  "precache-manifest.663364a390427cb9154138d4414caa8f.js": "/vk-apps-translate/precache-manifest.663364a390427cb9154138d4414caa8f.js",
   "service-worker.js": "/vk-apps-translate/service-worker.js",
-  "static/css/2.d9881c38.chunk.css.map": "/vk-apps-translate/static/css/2.d9881c38.chunk.css.map"
+  "static/css/2.d9881c38.chunk.css.map": "/vk-apps-translate/static/css/2.d9881c38.chunk.css.map",
+  "static/media/banner.png": "/vk-apps-translate/static/media/banner.43a50add.png"
 }
