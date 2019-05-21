@@ -21,7 +21,8 @@ class App extends React.Component {
 			translateText : '',
 			langFrom : 'en',
 			langTo : 'ru',
-			error : false
+			error : false,
+			fetchedUser : null
 		}
 	}
 
@@ -29,7 +30,15 @@ class App extends React.Component {
 		connect.subscribe((e) => {
 			switch (e.detail.type) {
 				case 'VKWebAppGetUserInfoResult':
+					ReactGA.initialize('UA-83599084-6', {
+						gaOptions: {
+							userId: e.detail.data.id
+						}
+					});
 					this.setState({ fetchedUser: e.detail.data })
+					break
+				case 'VKWebAppGetUserInfoFailed':
+					ReactGA.initialize('UA-83599084-6')
 					break
 				case 'VKWebAppUpdateConfig':
 					if (typeof e.detail.data.scheme !== 'undefined')

@@ -4,9 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import connect from '@vkontakte/vkui-connect';
 import App from './App';
-import ReactGA from 'react-ga';
 //UA-83599084-6
-ReactGA.initialize('UA-83599084-6');
+
 // import registerServiceWorker from './sw';
 
 // Init VK App
