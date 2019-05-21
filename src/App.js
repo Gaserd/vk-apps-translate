@@ -5,7 +5,7 @@ import Icon24Repeat from '@vkontakte/icons/dist/24/repeat'
 import { languages, checkLanguageAvailability } from './languages'
 import connect from '@vkontakte/vkui-connect'
 import ReactGA from 'react-ga'
-import VKMiniAppsButton from 'vk-apps-button'
+import banner from './banner.png'
 
 
 class App extends React.Component {
@@ -110,6 +110,23 @@ class App extends React.Component {
 					<PanelHeader>
 						Переводчик
 					</PanelHeader>
+					<a
+						style={{
+							display : 'block',
+							textAlign : 'center',
+							backgroundColor : '#3075f3',
+							marginTop : '-1px'
+						}}
+						href='https://skyeng.ru/go/translate_vk'
+						target='_blank'
+					>
+						<img
+							style={{
+								width : 320,
+								height : 100
+							}}
+							src={banner} />
+					</a>
 					<Div style={{
 						textAlign : 'center',
 						display : 'flex',
@@ -176,22 +193,7 @@ class App extends React.Component {
 							
 							</div>
 						}
-						<Div 
-							onClick={() => {
-										ReactGA.event({
-											category: 'Translate',
-											action: 'clickBanner'
-										})
-										connect.send("VKWebAppOpenApp", {"app_id": 6900614, "location": "utm_source=translate&utm_medium=banner&utm_campaign=translate_app"})
-							}
-						}>
-							<VKMiniAppsButton 
-								url={'https://vk.com/aviatickets'}
-								title={'Поиск авиабилетов'}
-								description={'Экономь на авиабилетах!'}
-								icon={'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/VK.com-logo.svg/768px-VK.com-logo.svg.png'}
-							/>
-						</Div>
+						
 						{
 							this.state.error &&
 							<Div
