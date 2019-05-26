@@ -6,7 +6,7 @@ import { languages, checkLanguageAvailability } from './languages'
 import connect from '@vkontakte/vkui-connect'
 import ReactGA from 'react-ga'
 import banner from './banner.png'
-
+import { getObjectUrl } from './utils'
 
 class App extends React.Component {
 
@@ -18,7 +18,7 @@ class App extends React.Component {
 			accountId : '1086',
 			apiKey : '5ad374573f56fbca9889cd71b0536db3',
 			text : '',
-			translateText : '',
+			translateText : 'Hello world',
 			langFrom : 'en',
 			langTo : 'ru',
 			error : false,
@@ -50,6 +50,14 @@ class App extends React.Component {
 		})
 		connect.send('VKWebAppGetUserInfo', {})
 		connect.send("VKWebAppUpdateConfig", {})
+
+		const object = getObjectUrl()
+		if (object !== null) {
+			if (typeof object.text !== 'undefined') {
+				let text = object.text
+				this.setState({ text })
+			}
+		}
 	}
 
 	onChangeText = (e) => {
@@ -128,13 +136,16 @@ class App extends React.Component {
 						}}
 						href='https://skyeng.ru/go/translate_vk'
 						target='_blank'
+						rel='noopener noreferrer'
 					>
 						<img
 							style={{
 								width : 320,
 								height : 100
 							}}
-							src={banner} />
+							src={banner} 
+							alt=''	
+						/>
 					</a>
 					<Div style={{
 						textAlign : 'center',
@@ -199,7 +210,6 @@ class App extends React.Component {
 									Перевод:
 									<p>{this.state.translateText}</p>
 							</Div>
-							
 							</div>
 						}
 						
