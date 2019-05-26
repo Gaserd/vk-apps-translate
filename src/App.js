@@ -18,7 +18,7 @@ class App extends React.Component {
 			accountId : '1086',
 			apiKey : '5ad374573f56fbca9889cd71b0536db3',
 			text : '',
-			translateText : 'Hello world',
+			translateText : '',
 			langFrom : 'en',
 			langTo : 'ru',
 			error : false,
