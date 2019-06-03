@@ -8,22 +8,52 @@ import ReactGA from 'react-ga'
 import banner from './banner.png'
 import { getObjectUrl } from './utils'
 
+const apiKey = '5ad374573f56fbca9889cd71b0536db3';
+const accountId = '1086';
+
+const widthPercent = '45%';
+
+const styles = {
+	externalLink: {
+		display : 'block',
+		textAlign : 'center',
+		backgroundColor : '#3075f3',
+		marginTop : '-1px'
+	},
+	banner: {
+		width : 320,
+		height : 100
+	},
+	selectWrapper: {
+		textAlign : 'center',
+		display : 'flex',
+		flexDirection : 'row',
+		justifyContent : 'center',
+		alignItems : 'center'
+	},
+	select: {
+		flexGrow  : 2,
+		width : widthPercent
+	},
+	reverseButton: {
+		display : 'inline-block',
+		margin : '0 5px',
+		color : 'var(--button_primary_background)'
+	}
+};
+
+const getColor = () => window.document.body.getAttribute('scheme') === 'client_light' ? '#4a4a4a' : '#fff';
+
 class App extends React.Component {
 
-	constructor(props) {
-		super(props)
-
-		this.state = {
-			activePanel: 'home',
-			accountId : '1086',
-			apiKey : '5ad374573f56fbca9889cd71b0536db3',
-			text : '',
-			translateText : '',
-			langFrom : 'en',
-			langTo : 'ru',
-			error : false,
-			fetchedUser : null
-		}
+	state = {
+		activePanel: 'home',
+		text : '',
+		translateText : '',
+		langFrom : 'en',
+		langTo : 'ru',
+		error : false,
+		fetchedUser : null
 	}
 
 	componentDidMount() {
@@ -66,7 +96,7 @@ class App extends React.Component {
 	}
 
 	onClickTranslateButton = () => {
-		let text = this.state.text.trim()
+		const text = this.state.text.trim()
 
 		ReactGA.event({
 			category: 'Translate',
@@ -75,11 +105,7 @@ class App extends React.Component {
 		})
 
 		if (text !== '') {
-			let {
-				accountId,
-				apiKey,
-				langTo
-			} = this.state
+			let { langTo } = this.state
 
 			fetch(`https://api.multillect.com/translate/json/1.0/${accountId}?method=translate/api/translate&to=${langTo}&text=${text}&sig=${apiKey}`)
 			.then(res => res.json())
@@ -115,12 +141,17 @@ class App extends React.Component {
 		})
 	}
 
-
+	renderSelect = type => (
+		<Select style={styles.select}
+		        value={this.state[type]}
+		        onChange={(e) => this.setState({ [type] : e.target.value })}>
+			{ languages.map((lang,index) => (
+				<option key={index} value={lang.value}>{lang.text}</option>
+			))}
+		</Select>
+	)
 
 	render() {
-
-		const widthPercent = '45%'
-
 		return (
 			<View activePanel={this.state.activePanel}>
 				<Panel id='home' theme='white'>
@@ -128,65 +159,29 @@ class App extends React.Component {
 						Переводчик
 					</PanelHeader>
 					<a
-						style={{
-							display : 'block',
-							textAlign : 'center',
-							backgroundColor : '#3075f3',
-							marginTop : '-1px'
-						}}
+						style={styles.externalLink}
 						href='https://skyeng.ru/go/translate_vk'
 						target='_blank'
 						rel='noopener noreferrer'
 					>
 						<img
-							style={{
-								width : 320,
-								height : 100
-							}}
-							src={banner} 
-							alt=''	
+							style={styles.banner}
+							src={banner}
+							alt=''
 						/>
 					</a>
-					<Div style={{
-						textAlign : 'center',
-						display : 'flex',
-						flexDirection : 'row',
-						justifyContent : 'center',
-						alignItems : 'center'
-					}}>
-						<Select style={{
-							flexGrow  : 2,
-							width : widthPercent
-						}} 
-						value={this.state.langFrom}
-						onChange={(e) => this.setState({ langFrom : e.target.value })}>
-							{ languages.map((lang,index) => (
-								<option key={index} value={lang.value}>{lang.text}</option>
-							))}
-						</Select>
-						<div 
+					<Div style={styles.selectWrapper}>
+						{this.renderSelect('langFrom')}
+						<div
 						onClick={() => this.onReverseLanguage()}
-						style={{
-							display : 'inline-block',
-							margin : '0 5px',
-							color : 'var(--button_primary_background)'
-						}}>
+						style={styles.reverseButton}>
 							<Icon24Repeat />
 						</div>
-						<Select style={{
-							flexGrow  : 2,
-							width: widthPercent
-						}} 
-						value={this.state.langTo}
-						onChange={(e) => this.setState({ langTo : e.target.value })}>
-							{ languages.map((lang,index) => (
-								<option key={index} value={lang.value}>{lang.text}</option>
-							))}
-						</Select>
+						{this.renderSelect('langTo')}
 					</Div>
 					<FormLayout>
-						<Textarea 
-							top="Введите текст (макс: 300 символов)" 
+						<Textarea
+							top="Введите текст (макс: 300 символов)"
 							placeholder="Введите текст, который хотите перевести"
 							value={this.state.text}
 							onChange={this.onChangeText}
@@ -204,7 +199,7 @@ class App extends React.Component {
 							<div>
 							<Div
 								style={{
-									color : (window.document.body.getAttribute('scheme') === 'client_light') ? '#4a4a4a' : '#fff'
+									color : getColor()
 								}}
 							>
 									Перевод:
@@ -212,12 +207,12 @@ class App extends React.Component {
 							</Div>
 							</div>
 						}
-						
+
 						{
 							this.state.error &&
 							<Div
 								style={{
-									color : (window.document.body.getAttribute('scheme') === 'client_light') ? '#4a4a4a' : '#fff'
+									color : getColor()
 								}}
 							>
 								<p>Извините, но возникла какая-то ошибка. Попробуйте повторить через 2-3 минуты.</p>
