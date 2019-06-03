@@ -9,61 +9,54 @@ export const languages = [
     },
     {
        "value":"ar",
-       "text":"Арабский" 
+       "text":"Арабский"
     },
     {
        "value":"es",
-       "text":"Испанский" 
+       "text":"Испанский"
     },
     /*{
        "value":"kk",
-       "text":"Казахский" 
+       "text":"Казахский"
     },
     {
        "value":"zh",
-       "text":"Китайский" 
+       "text":"Китайский"
     },
     {
        "value":"ko",
-       "text":"Корейский" 
+       "text":"Корейский"
     },*/
     {
        "value":"de",
-       "text":"Немецкий" 
+       "text":"Немецкий"
     },
     /*{
        "value":"pl",
-       "text":"Польский" 
+       "text":"Польский"
     },
     {
        "value":"pt",
-       "text":"Португальский" 
+       "text":"Португальский"
     },*/
     {
        "value":"tr",
-       "text":"Турецкий" 
+       "text":"Турецкий"
     },
     {
        "value":"uk",
-       "text":"Украинский" 
+       "text":"Украинский"
     },
     {
        "value":"fr",
-       "text":"Французский" 
+       "text":"Французский"
     },
     /*{
        "value":"hi",
-       "text":"Хинди" 
+       "text":"Хинди"
     }*/
  ]
 
 export function checkLanguageAvailability(lang) {
-   let flag = false
-   for (let i = 0; i < languages.length; i++) {
-      if (languages[i].value === lang) {
-         flag = true
-         break
-      }
-   }
-   return flag
+   return languages.some(item => item.value === lang)
 }
