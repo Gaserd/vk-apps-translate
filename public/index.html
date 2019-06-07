@@ -20,6 +20,33 @@
 				});
 			</script>
 			<noscript><div><img src="https://mc.yandex.ru/watch/53752579" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+			                      
+			<script type="text/javascript" src="//vk.com/js/api/xd_connection.js?2" charset="utf-8"></script>
+			<script type="text/javascript" src="//ad.mail.ru/static/admanhtml/rbadman-html5.min.js" charset="utf-8"></script>
+			<script type="text/javascript" src="//vk.com/js/api/adman_init.js" charset="utf-8"></script>
+			<script>
+
+				window.vk_user_id = null
+
+				window.addEventListener('load', function() {
+				
+					var app_id = 6959073;
+					
+					setTimeout(function() {
+						admanInit({
+							user_id: window.vk_user_id,
+							app_id: 6959073,
+							type: 'preloader'
+						}, onAdsReady, onNoAds);
+					
+						function onAdsReady(adman) {
+							adman.start('preroll');
+						};
+						function onNoAds() {};
+					}, 15000)
+				});
+			</script>
+    
 			<!-- /Yandex.Metrika counter -->
 	</head>
 	<body scheme="client_light">
