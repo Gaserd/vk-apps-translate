@@ -66,8 +66,6 @@ class App extends React.Component {
 						}
 					});
 					this.setState({ fetchedUser: e.detail.data })
-					console.log(e.detail.data)
-					console.log(window)
 					window.vk_user_id = e.detail.data.id
 					break
 				case 'VKWebAppGetUserInfoFailed':
