@@ -18,12 +18,12 @@ export const languages = [
     /*{
        "value":"kk",
        "text":"Казахский"
-    },
+    },*/
     {
        "value":"zh",
        "text":"Китайский"
     },
-    {
+    /*{
        "value":"ko",
        "text":"Корейский"
     },*/
