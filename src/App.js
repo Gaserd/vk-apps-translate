@@ -5,7 +5,7 @@ import Icon24Repeat from '@vkontakte/icons/dist/24/repeat'
 import { languages, checkLanguageAvailability } from './languages'
 import connect from '@vkontakte/vkui-connect'
 import ReactGA from 'react-ga'
-import banner from './banner.png'
+import banner from './banner2.png'
 import { getObjectUrl } from './utils'
 
 const apiKey = '5ad374573f56fbca9889cd71b0536db3';
@@ -17,8 +17,11 @@ const styles = {
 	externalLink: {
 		display : 'block',
 		textAlign : 'center',
-		backgroundColor : '#3075f3',
-		marginTop : '-1px'
+		backgroundColor : 'var(--header_background)',
+		marginTop : '-1px',
+		padding : 10,
+		color : '#fff',
+		textDecoration : 'none'
 	},
 	banner: {
 		width : 320,
@@ -160,15 +163,11 @@ class App extends React.Component {
 					</PanelHeader>
 					<a
 						style={styles.externalLink}
-						href='https://skyeng.ru/go/translate_vk'
+						href='https://vk.com/clanofnorthwolf'
 						target='_blank'
 						rel='noopener noreferrer'
 					>
-						<img
-							style={styles.banner}
-							src={banner}
-							alt=''
-						/>
+						Вступай в <b>Клан Северного Волка <span style={{color:'red'}}>\</span>Киберспорт</b>
 					</a>
 					<Div style={styles.selectWrapper}>
 						{this.renderSelect('langFrom')}
