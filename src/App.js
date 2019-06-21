@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Panel, PanelHeader, Button, Div, Textarea, FormLayout, Select } from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css'
 import Icon24Repeat from '@vkontakte/icons/dist/24/repeat'
@@ -47,19 +47,16 @@ const styles = {
 
 const getColor = () => window.document.body.getAttribute('scheme') === 'client_light' ? '#4a4a4a' : '#fff';
 
-class App extends React.Component {
+const App = () => {
+	const [activePanel, setActivePanel] = useState('home');
+	const [text, setText] = useState('');
+	const [translateText, setTranslateText] = useState('');
+	const [langFrom, setLangFrom] = useState('en');
+	const [langTo, setLangTo] = useState('ru');
+	const [error, setError] = useState(false);
+	const [fetchedUser, setFetchedUser] = useState(null);
 
-	state = {
-		activePanel: 'home',
-		text : '',
-		translateText : '',
-		langFrom : 'en',
-		langTo : 'ru',
-		error : false,
-		fetchedUser : null
-	}
-
-	componentDidMount() {
+	useEffect(() => {
 		connect.subscribe((e) => {
 			switch (e.detail.type) {
 				case 'VKWebAppGetUserInfoResult':
@@ -68,7 +65,7 @@ class App extends React.Component {
 							userId: e.detail.data.id
 						}
 					});
-					this.setState({ fetchedUser: e.detail.data })
+					setFetchedUser(e.detail.data)
 					break
 				case 'VKWebAppGetUserInfoFailed':
 					ReactGA.initialize('UA-83599084-6')
@@ -87,141 +84,134 @@ class App extends React.Component {
 		const object = getObjectUrl()
 		if (object !== null) {
 			if (typeof object.text !== 'undefined') {
-				let text = object.text
-				this.setState({ text })
+				setText(object.text)
 			}
 		}
+	}, []);
+
+	const onChangeText = e => {
+		setText(e.target.value)
 	}
 
-	onChangeText = (e) => {
-		const text = e.target.value
-		this.setState({ text })
-	}
-
-	onClickTranslateButton = () => {
-		const text = this.state.text.trim()
+	const onClickTranslateButton = () => {
+		const trimedText = text.trim()
 
 		ReactGA.event({
 			category: 'Translate',
 			action: 'onClickTranslateButton',
-			value : JSON.stringify(this.state)
+			value : JSON.stringify({text, translateText, langFrom, langTo, fetchedUser})
 		})
 
-		if (text !== '') {
-			let { langTo } = this.state
-
-			fetch(`https://api.multillect.com/translate/json/1.0/${accountId}?method=translate/api/translate&to=${langTo}&text=${text}&sig=${apiKey}`)
+		if (trimedText !== '') {
+			fetch(`https://api.multillect.com/translate/json/1.0/${accountId}?method=translate/api/translate&to=${langTo}&text=${trimedText}&sig=${apiKey}`)
 			.then(res => res.json())
 			.then(data => {
 				if (typeof data.result.language !== 'undefined' && data.result.language.code !== null) {
 					const code = data.result.language.code
-					if (this.state.langFrom !== code) {
+					if (langFrom !== code) {
 						if (checkLanguageAvailability(code)) {
-							this.setState({ langFrom : code })
+							setLangFrom(code)
 						}
 					}
 				}
-				this.setState({ translateText : data.result.translated })
+				setTranslateText(data.result.translated)
 			})
 			.catch(e => {
-				this.setState({ translateText : '' , error : true })
+				setTranslateText('')
+				setError(true)
 			})
 		} else {
-			this.setState({ translateText : '' })
+			setTranslateText('')
 		}
 	}
 
-	onReverseLanguage = () => {
+	const onReverseLanguage = () => {
 
 		ReactGA.event({
 			category: 'Translate',
 			action: 'onReverseLanguage'
 		})
 
-		this.setState({
-			langFrom : this.state.langTo,
-			langTo : this.state.langFrom
-		})
+		setLangFrom(langTo);
+		setLangTo(langFrom)
 	}
 
-	renderSelect = type => (
+	const renderSelect = (value, setFunction) => (
 		<Select style={styles.select}
-		        value={this.state[type]}
-		        onChange={(e) => this.setState({ [type] : e.target.value })}>
+		        value={value}
+		        onChange={(e) => setFunction(e.target.value)}>
 			{ languages.map((lang,index) => (
 				<option key={index} value={lang.value}>{lang.text}</option>
 			))}
 		</Select>
 	)
 
-	render() {
-		return (
-			<View activePanel={this.state.activePanel}>
-				<Panel id='home' theme='white'>
-					<PanelHeader>
-						Переводчик
-					</PanelHeader>
-					<a
-						style={styles.externalLink}
-						href='https://vk.com/clanofnorthwolf'
-						target='_blank'
-						rel='noopener noreferrer'
+	return (
+		<View activePanel={activePanel}>
+			<Panel id='home' theme='white'>
+				<PanelHeader>
+					Переводчик
+				</PanelHeader>
+				<a
+					style={styles.externalLink}
+					href='https://vk.com/clanofnorthwolf'
+					target='_blank'
+					rel='noopener noreferrer'
+				>
+					Вступай в <b>Клан Северного Волка <span style={{color:'red'}}>\</span>Киберспорт</b>
+				</a>
+				<Div style={styles.selectWrapper}>
+					{renderSelect(langFrom, setLangFrom)}
+					<div
+					onClick={() => onReverseLanguage()}
+					style={styles.reverseButton}>
+						<Icon24Repeat />
+					</div>
+					{renderSelect(langTo, setLangTo)}
+				</Div>
+				<FormLayout>
+					<Textarea
+						top="Введите текст (макс: 300 символов)"
+						placeholder="Введите текст, который хотите перевести"
+						value={text}
+						onChange={onChangeText}
+						maxLength={300}
 					>
-						Вступай в <b>Клан Северного Волка <span style={{color:'red'}}>\</span>Киберспорт</b>
-					</a>
-					<Div style={styles.selectWrapper}>
-						{this.renderSelect('langFrom')}
-						<div
-						onClick={() => this.onReverseLanguage()}
-						style={styles.reverseButton}>
-							<Icon24Repeat />
+					</Textarea>
+					<Button
+						size='xl'
+						onClick={() => onClickTranslateButton()}
+					>
+						Перевести
+					</Button>
+					{
+						translateText !== '' &&
+						<div>
+						<Div
+							style={{
+								color : getColor()
+							}}
+						>
+								Перевод:
+								<p>{translateText}</p>
+						</Div>
 						</div>
-						{this.renderSelect('langTo')}
-					</Div>
-					<FormLayout>
-						<Textarea
-							top="Введите текст (макс: 300 символов)"
-							placeholder="Введите текст, который хотите перевести"
-							value={this.state.text}
-							onChange={this.onChangeText}
-							maxLength={300}
-						>
-						</Textarea>
-						<Button
-							size='xl'
-							onClick={() => this.onClickTranslateButton()}
-						>
-							Перевести
-						</Button>
-						{
-							this.state.translateText !== '' &&
-							<div>
-							<Div
-								style={{
-									color : getColor()
-								}}
-							>
-									Перевод:
-									<p>{this.state.translateText}</p>
-							</Div>
-							</div>
-						}
+					}
 
-						{
-							this.state.error &&
-							<Div
-								style={{
-									color : getColor()
-								}}
-							>
-								<p>Извините, но возникла какая-то ошибка. Попробуйте повторить через 2-3 минуты.</p>
-							</Div>
-						}
-					</FormLayout>
-				</Panel>
-			</View>
-		)
-	}
+					{
+						error &&
+						<Div
+							style={{
+								color : getColor()
+							}}
+						>
+							<p>Извините, но возникла какая-то ошибка. Попробуйте повторить через 2-3 минуты.</p>
+						</Div>
+					}
+				</FormLayout>
+			</Panel>
+		</View>
+	)
 }
 
 export default App
