@@ -56,6 +56,7 @@ class App extends React.Component {
 		langFrom : 'en',
 		langTo : 'ru',
 		error : false,
+		matches : [],
 		fetchedUser : null
 	}
 
@@ -73,6 +74,12 @@ class App extends React.Component {
 				case 'VKWebAppGetUserInfoFailed':
 					ReactGA.initialize('UA-83599084-6')
 					break
+				case 'VKWebAppGetAdsResult':
+					console.log(e.detail)
+					break
+				case 'VKWebAppGetAdsFailed':
+					console.log(e.detail)
+					break
 				case 'VKWebAppUpdateConfig':
 					if (typeof e.detail.data.scheme !== 'undefined')
 						window.document.body.setAttribute('scheme', e.detail.data.scheme)
@@ -83,6 +90,8 @@ class App extends React.Component {
 		})
 		connect.send('VKWebAppGetUserInfo', {})
 		connect.send("VKWebAppUpdateConfig", {})
+
+		connect.send("VKWebAppGetAds", {});
 
 		const object = getObjectUrl()
 		if (object !== null) {
@@ -108,20 +117,17 @@ class App extends React.Component {
 		})
 
 		if (text !== '') {
-			let { langTo } = this.state
+			let { langTo, langFrom } = this.state
 
-			fetch(`https://api.multillect.com/translate/json/1.0/${accountId}?method=translate/api/translate&to=${langTo}&text=${text}&sig=${apiKey}`)
+			fetch(`https://api.mymemory.translated.net/get?q=${text}&langpair=${langFrom}|${langTo}`)
 			.then(res => res.json())
 			.then(data => {
-				if (typeof data.result.language !== 'undefined' && data.result.language.code !== null) {
-					const code = data.result.language.code
-					if (this.state.langFrom !== code) {
-						if (checkLanguageAvailability(code)) {
-							this.setState({ langFrom : code })
-						}
-					}
+				if (typeof data.responseData !== 'undefined') {
+					this.setState({ 
+						translateText : data.responseData.translatedText,
+						matches : data.matches
+					})
 				}
-				this.setState({ translateText : data.result.translated })
 			})
 			.catch(e => {
 				this.setState({ translateText : '' , error : true })
@@ -206,7 +212,24 @@ class App extends React.Component {
 							</Div>
 							</div>
 						}
-
+						{
+							this.state.matches.length > 0 &&
+							<div>
+								<Div
+									style={{
+										color : getColor(),
+										marginTop : 5
+									}}
+								>
+										<b>Еще несколько вариантов перевода:</b>
+										{
+											this.state.matches.map((match, index) => (
+												<p key={index}>{match.translation}</p>
+											))
+										}
+								</Div>
+							</div>
+						}
 						{
 							this.state.error &&
 							<Div
