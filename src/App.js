@@ -169,7 +169,7 @@ class App extends React.Component {
 						Переводчик
 					</PanelHeader>
 					<div>
-                        <a href="http://bit.ly/37n2248">
+                        <a href="https://ggbetpromo.com/l/5e427d2528c43f7c7d7691ce">
 							<img src={ggbet}></img>
 						</a>
                     </div>
