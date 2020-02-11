@@ -6,6 +6,7 @@ import { languages, checkLanguageAvailability } from './languages'
 import connect from '@vkontakte/vkui-connect'
 import ReactGA from 'react-ga'
 import banner from './banner2.png'
+import ggbet from './ggbet.jpg'
 import { getObjectUrl } from './utils'
 
 const apiKey = '5ad374573f56fbca9889cd71b0536db3';
@@ -167,14 +168,11 @@ class App extends React.Component {
 					<PanelHeader>
 						Переводчик
 					</PanelHeader>
-					<a
-						style={styles.externalLink}
-						href='https://vk.com/clanofnorthwolf'
-						target='_blank'
-						rel='noopener noreferrer'
-					>
-						Вступай в <b>Клан Северного Волка <span style={{color:'red'}}>\</span>Киберспорт</b>
-					</a>
+					<div>
+                        <a href="http://bit.ly/37n2248">
+							<img src={ggbet}></img>
+						</a>
+                    </div>
 					<Div style={styles.selectWrapper}>
 						{this.renderSelect('langFrom')}
 						<div
